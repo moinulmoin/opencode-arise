@@ -172,7 +172,7 @@ export const OpencodeArise: Plugin = async (ctx: PluginInput): Promise<Hooks> =>
 
       // Handle session.idle for todo enforcement
       if (event.type === "session.idle" && todoEnforcer) {
-        const sessionId = (event as any).properties?.sessionID;
+        const sessionId = (event as { properties?: { sessionID?: string } }).properties?.sessionID;
         if (sessionId) {
           try {
             // Get recent messages to check for incomplete todos
@@ -181,14 +181,18 @@ export const OpencodeArise: Plugin = async (ctx: PluginInput): Promise<Hooks> =>
             });
 
             if (messages.data) {
-              const recentMessages = messages.data.slice(-5).map((m) => ({
-                content: (m as any).content ?? "",
-              }));
+              // Extract text content from message parts
+              const recentMessages = messages.data.slice(-5).map((m) => {
+                const textContent = m.parts
+                  ?.filter((p) => p.type === "text")
+                  .map((p) => (p as { type: "text"; text: string }).text ?? "")
+                  .join("\n") ?? "";
+                return { content: textContent };
+              });
 
               const result = await todoEnforcer.checkCompletion(recentMessages);
 
               if (result.hasIncompleteTodos && result.reminderMessage) {
-                // Show toast reminder
                 await ctx.client.tui.showToast({
                   body: {
                     title: "Arise - Incomplete Tasks",

@@ -1,4 +1,4 @@
-import { tool } from "@opencode-ai/plugin";
+import { tool, type ToolContext } from "@opencode-ai/plugin";
 import type { BackgroundManager } from "./background-manager";
 import type { ShadowName } from "../config/schema";
 
@@ -13,7 +13,7 @@ Best for:
 - tank: Parallel external research
 - bellion: Parallel planning/analysis
 
-Returns a task_id immediately. Use background_output to get results later.`,
+Returns a task_id immediately. Use arise_background_output to get results later.`,
 
     args: {
       shadow: tool.schema
@@ -25,20 +25,17 @@ Returns a task_id immediately. Use background_output to get results later.`,
       description: tool.schema
         .string()
         .describe("Short description (3-5 words)"),
-      parent_session_id: tool.schema
-        .string()
-        .describe("Current session ID"),
     },
 
-    async execute(args) {
-      const { shadow, prompt, description, parent_session_id } = args;
+    async execute(args, context: ToolContext) {
+      const { shadow, prompt, description } = args;
 
       try {
         const task = await manager.launch({
           shadow,
           prompt,
           description,
-          parentSessionId: parent_session_id,
+          parentSessionId: context.sessionID,
         });
 
         return `[arise] Shadow ${shadow} launched in background.
@@ -46,7 +43,7 @@ Returns a task_id immediately. Use background_output to get results later.`,
 Task ID: ${task.id}
 Description: ${description}
 
-Use background_output("${task.id}") when you need the result.`;
+Use arise_background_output("${task.id}") when you need the result.`;
       } catch (error) {
         const msg = error instanceof Error ? error.message : String(error);
         return `[arise] Failed to launch background task: ${msg}`;
@@ -62,7 +59,7 @@ export function createBackgroundOutputTool(manager: BackgroundManager): ReturnTy
     args: {
       task_id: tool.schema
         .string()
-        .describe("The task ID from background_task"),
+        .describe("The task ID from arise_background"),
     },
 
     async execute(args) {
@@ -96,17 +93,17 @@ export function createBackgroundStatusTool(manager: BackgroundManager): ReturnTy
     description: "List all background tasks and their status.",
 
     args: {
-      session_id: tool.schema
-        .string()
+      current_session_only: tool.schema
+        .boolean()
         .optional()
-        .describe("Filter by parent session (optional)"),
+        .describe("Only show tasks from current session"),
     },
 
-    async execute(args) {
+    async execute(args, context: ToolContext) {
       let tasks = manager.getAllTasks();
 
-      if (args.session_id) {
-        tasks = tasks.filter((t) => t.parentSessionId === args.session_id);
+      if (args.current_session_only) {
+        tasks = tasks.filter((t) => t.parentSessionId === context.sessionID);
       }
 
       if (tasks.length === 0) {
