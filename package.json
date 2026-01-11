@@ -1,0 +1,59 @@
+{
+  "name": "opencode-arise",
+  "version": "0.1.0",
+  "description": "Solo Leveling themed orchestrator harness for OpenCode - Arise, Shadow Army!",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "opencode-arise": "dist/cli/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun && bun build src/cli/index.ts --outdir dist/cli --target bun && tsc --emitDeclarationOnly",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun run clean && bun run build"
+  },
+  "files": [
+    "dist",
+    "assets"
+  ],
+  "keywords": [
+    "opencode",
+    "plugin",
+    "ai",
+    "agent",
+    "orchestrator",
+    "solo-leveling",
+    "arise"
+  ],
+  "author": "moinulmoin",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moinulmoin/opencode-arise.git"
+  },
+  "bugs": {
+    "url": "https://github.com/moinulmoin/opencode-arise/issues"
+  },
+  "homepage": "https://github.com/moinulmoin/opencode-arise#readme",
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.1.11",
+    "@opencode-ai/sdk": "^1.1.11",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.0",
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {
+    "bun": ">=1.0.0"
+  }
+}
