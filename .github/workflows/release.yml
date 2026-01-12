@@ -36,7 +36,8 @@ jobs:
 
       - name: Publish to npm with provenance
         run: npm publish --provenance --access public
-        # Using npm Trusted Publishing (OIDC) - no token needed
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Extract version from tag
         id: get_version
