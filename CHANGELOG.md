@@ -5,12 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2025-01-12
+
+### Fixed
+
+- Exclude cover images from npm package (1.4 MB → 98 KB)
+- Only include `assets/arise-banner.txt`, not full assets folder
+
 ## [0.1.4] - 2025-01-12
 
 ### Fixed
 
 - CI workflow: Build before test (fixes build.test.ts requiring dist/)
-- Release workflow: Add NPM_TOKEN fallback for npm publish
+- Release workflow: Pure OIDC Trusted Publishing
 
 ## [0.1.3] - 2025-01-12
 
