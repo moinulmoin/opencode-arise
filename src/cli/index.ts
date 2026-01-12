@@ -18,19 +18,109 @@ function findOpencodeConfig(): string | null {
 }
 
 function parseJsonc(content: string): unknown {
-  // Strip comments and trailing commas
-  let cleaned = content
-    .replace(/\/\/.*$/gm, "")
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/,(\s*[}\]])/g, "$1");
-  return JSON.parse(cleaned);
+  // More robust JSONC parsing:
+  // 1. Remove single-line comments (but not inside strings)
+  // 2. Remove multi-line comments
+  // 3. Remove trailing commas
+  
+  let result = "";
+  let inString = false;
+  let inSingleLineComment = false;
+  let inMultiLineComment = false;
+  let i = 0;
+  
+  while (i < content.length) {
+    const char = content[i];
+    const nextChar = content[i + 1];
+    
+    if (inSingleLineComment) {
+      if (char === "\n") {
+        inSingleLineComment = false;
+        result += char;
+      }
+      i++;
+      continue;
+    }
+    
+    if (inMultiLineComment) {
+      if (char === "*" && nextChar === "/") {
+        inMultiLineComment = false;
+        i += 2;
+        continue;
+      }
+      i++;
+      continue;
+    }
+    
+    if (inString) {
+      result += char;
+      if (char === "\\") {
+        // Skip escaped character
+        result += nextChar ?? "";
+        i += 2;
+        continue;
+      }
+      if (char === '"') {
+        inString = false;
+      }
+      i++;
+      continue;
+    }
+    
+    // Not in string or comment
+    if (char === '"') {
+      inString = true;
+      result += char;
+      i++;
+      continue;
+    }
+    
+    if (char === "/" && nextChar === "/") {
+      inSingleLineComment = true;
+      i += 2;
+      continue;
+    }
+    
+    if (char === "/" && nextChar === "*") {
+      inMultiLineComment = true;
+      i += 2;
+      continue;
+    }
+    
+    result += char;
+    i++;
+  }
+  
+  // Remove trailing commas
+  result = result.replace(/,(\s*[}\]])/g, "$1");
+  
+  return JSON.parse(result);
 }
 
 function addPluginToConfig(configPath: string): boolean {
+  let content: string;
+  
   try {
-    const content = readFileSync(configPath, "utf-8");
-    const config = parseJsonc(content) as Record<string, unknown>;
+    content = readFileSync(configPath, "utf-8");
+  } catch (err) {
+    console.error(`✗ Failed to read config file: ${configPath}`);
+    console.error(`  Error: ${err instanceof Error ? err.message : err}`);
+    return false;
+  }
+  
+  let config: Record<string, unknown>;
+  
+  try {
+    config = parseJsonc(content) as Record<string, unknown>;
+  } catch (err) {
+    console.error(`✗ Failed to parse config file: ${configPath}`);
+    console.error(`  Error: ${err instanceof Error ? err.message : err}`);
+    console.error(`\n  Your config file may have invalid JSON syntax.`);
+    console.error(`  You can manually add "${PLUGIN_NAME}" to the "plugin" array.`);
+    return false;
+  }
 
+  try {
     if (!config.plugin) {
       config.plugin = [];
     }
@@ -64,7 +154,6 @@ function createDefaultAriseConfig(): void {
   }
 
   const defaultConfig = {
-    $schema: "https://raw.githubusercontent.com/your-repo/opencode-arise/main/assets/opencode-arise.schema.json",
     show_banner: true,
     disabled_shadows: [],
     disabled_hooks: [],
@@ -133,7 +222,7 @@ function doctor(): void {
       console.log(`  Run: bunx ${PLUGIN_NAME} install`);
     }
   } catch (err) {
-    console.log(`✗ Failed to read config:`, err);
+    console.log(`✗ Failed to read config:`, err instanceof Error ? err.message : err);
   }
 
   const ariseConfigPath = join(process.env.HOME ?? "", ".config/opencode/opencode-arise.json");
