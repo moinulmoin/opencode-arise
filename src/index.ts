@@ -74,7 +74,7 @@ function isHookEnabled(config: AriseConfig, hookName: HookName): boolean {
   return !(config.disabled_hooks ?? []).includes(hookName);
 }
 
-export const OpencodeArise: Plugin = async (ctx: PluginInput): Promise<Hooks> => {
+const OpencodeArise: Plugin = async (ctx: PluginInput): Promise<Hooks> => {
   const config = await loadAriseConfig(ctx);
 
   // Initialize background manager
@@ -214,5 +214,8 @@ export const OpencodeArise: Plugin = async (ctx: PluginInput): Promise<Hooks> =>
 
 export default OpencodeArise;
 
+// NOTE: Do NOT export non-type values from main index.ts!
+// OpenCode treats ALL exports as plugin instances and tries to call them.
+// Use "opencode-arise/agents" subpath if you need to import SHADOW_AGENTS.
 export type { AriseConfig } from "./config/schema";
-export { SHADOW_AGENTS } from "./agents";
+export type { ShadowAgent } from "./agents/shadows";
