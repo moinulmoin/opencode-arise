@@ -169,12 +169,12 @@ You can also create `.opencode/opencode-arise.json` in your project root. Projec
 
 | Shadow | Default Model |
 |--------|---------------|
-| monarch | `opencode/opus-4.5` |
-| beru | `opencode/glm-4.7` |
-| igris | `opencode/glm-4.7` |
-| bellion | `opencode/opus-4.5` |
-| tusk | `opencode/opus-4.5` |
-| tank | `opencode/glm-4.7` |
+| monarch | `anthropic/claude-opus-4-5` |
+| beru | `anthropic/claude-haiku-4-5` |
+| igris | `zai-coding-plan/glm-4.7` |
+| bellion | `openai/gpt-5.2` |
+| tusk | `google/gemini-3-pro-preview` |
+| tank | `zai-coding-plan/glm-4.7` |
 | shadow-sovereign | `openai/gpt-5.2` (high reasoning) |
 
 ## Examples

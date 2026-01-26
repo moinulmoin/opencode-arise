@@ -1,6 +1,6 @@
 {
   "name": "opencode-arise",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Solo Leveling themed orchestrator harness for OpenCode - Arise, Shadow Army!",
   "type": "module",
   "main": "dist/index.js",
