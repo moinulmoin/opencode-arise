@@ -14,7 +14,7 @@ export const SHADOW_AGENTS: Record<string, ShadowAgent> = {
     name: "monarch",
     description: "Shadow Monarch - Orchestrator (Sung Jinwoo)",
     mode: "primary",
-    model: "opencode/opus-4.5",
+    model: "anthropic/claude-opus-4-5",
     steps: 16,
     prompt: `You are the Shadow Monarch (opencode-arise).
 
@@ -50,7 +50,7 @@ ARISE and lead your shadows to victory.`,
     name: "beru",
     description: "Ant King - Fastest codebase scout",
     mode: "subagent",
-    model: "opencode/glm-4.7",
+    model: "anthropic/claude-haiku-4-5",
     steps: 12,
     permission: {
       edit: "deny",
@@ -70,7 +70,7 @@ Be thorough but fast. Search multiple patterns if needed. Return clear, actionab
     name: "igris",
     description: "Loyal Knight - Precise implementation",
     mode: "subagent",
-    model: "opencode/glm-4.7",
+    model: "zai-coding-plan/glm-4.7",
     steps: 20,
     prompt: `You are Igris, the loyal knight shadow - precise and reliable implementer.
 
@@ -89,7 +89,7 @@ Execute with honor.`,
     name: "bellion",
     description: "Grand Marshal - Strategy and planning",
     mode: "subagent",
-    model: "opencode/opus-4.5",
+    model: "openai/gpt-5.2",
     steps: 12,
     permission: {
       edit: "deny",
@@ -114,7 +114,7 @@ Think deeply, plan carefully.`,
     name: "tusk",
     description: "Creative shadow - UI/UX specialist",
     mode: "subagent",
-    model: "opencode/opus-4.5",
+    model: "google/gemini-3-pro-preview",
     steps: 18,
     prompt: `You are Tusk, the creative shadow - UI/UX and frontend specialist.
 
@@ -133,7 +133,7 @@ Create with artistry.`,
     name: "tank",
     description: "Research shadow - External knowledge gatherer",
     mode: "subagent",
-    model: "opencode/glm-4.7",
+    model: "zai-coding-plan/glm-4.7",
     steps: 18,
     permission: {
       edit: "deny",
@@ -183,11 +183,11 @@ Your wisdom guides the shadow army through the most challenging battles.`,
 export const OPENCODE_OVERRIDES = {
   build: {
     mode: "all" as const,
-    model: "opencode/glm-4.7",
+    model: "zai-coding-plan/glm-4.7",
   },
   plan: {
     mode: "all" as const,
-    model: "opencode/opus-4.5",
+    model: "anthropic/claude-opus-4-5",
   },
   explore: {
     description: "OpenCode explore (use @beru for arise)",
