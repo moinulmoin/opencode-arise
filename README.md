@@ -129,10 +129,25 @@ Create `~/.config/opencode/opencode-arise.json`:
   "disabled_hooks": [],
   "agents": {
     "monarch": {
-      "model": "anthropic/claude-sonnet-4"
+      "model": "opencode/big-pickle"
     },
     "beru": {
-      "model": "openai/gpt-4.1-mini"
+      "model": "opencode/big-pickle"
+    },
+    "igris": {
+      "model": "opencode/big-pickle"
+    },
+    "bellion": {
+      "model": "opencode/big-pickle"
+    },
+    "tusk": {
+      "model": "opencode/big-pickle"
+    },
+    "tank": {
+      "model": "opencode/big-pickle"
+    },
+    "shadow-sovereign": {
+      "model": "opencode/big-pickle"
     }
   },
   "output_shaping": {
@@ -185,7 +200,7 @@ You can also create `.opencode/opencode-arise.json` in your project root. Projec
 You: "I need to understand how authentication works and find security best practices"
 
 Monarch: *launches beru (codebase) and tank (research) in background*
-         "Beru is exploring the auth implementation while Tank researches 
+         "Beru is exploring the auth implementation while Tank researches
           security best practices. I'll compile their findings."
 ```
 

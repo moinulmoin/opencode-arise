@@ -45,13 +45,14 @@
   },
   "homepage": "https://github.com/moinulmoin/opencode-arise#readme",
   "dependencies": {
-    "@opencode-ai/plugin": "^1.1.11",
-    "@opencode-ai/sdk": "^1.1.11",
-    "zod": "^3.24.0"
+    "@opencode-ai/plugin": "^1.2.27",
+    "@opencode-ai/sdk": "^1.2.27",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.0",
-    "typescript": "^5.7.0"
+    "@types/bun": "^1.3.11",
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "bun": ">=1.0.0"

@@ -1,6 +1,7 @@
 import type { Plugin, PluginInput, Hooks } from "@opencode-ai/plugin";
 import type { Event } from "@opencode-ai/sdk";
 import { AriseConfigSchema, DEFAULT_CONFIG, type AriseConfig, type HookName, type ShadowName } from "./config/schema";
+import { CONFIG_FILENAME, getAriseConfigPaths } from "./config/paths";
 import { SHADOW_AGENTS, OPENCODE_OVERRIDES } from "./agents";
 import {
   createAriseBannerHook,
@@ -22,10 +23,7 @@ type JsonObject = Record<string, unknown>;
 const CONFIG_FILENAME = "opencode-arise.json";
 
 async function loadAriseConfig(ctx: PluginInput): Promise<AriseConfig> {
-  const paths = [
-    `${ctx.worktree}/.opencode/${CONFIG_FILENAME}`,
-    `${process.env.HOME}/.config/opencode/${CONFIG_FILENAME}`,
-  ];
+  const paths = getAriseConfigPaths(ctx.worktree);
 
   let merged: JsonObject = { ...DEFAULT_CONFIG };
 

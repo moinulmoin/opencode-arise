@@ -28,8 +28,8 @@ export const AriseConfigSchema = z.object({
   $schema: z.string().optional(),
   disabled_shadows: z.array(ShadowName).optional(),
   disabled_hooks: z.array(HookName).optional(),
-  show_banner: z.boolean().default(true),
-  banner_every_session: z.boolean().default(false),
+  show_banner: z.boolean().default(true).optional(),
+  banner_every_session: z.boolean().default(false).optional(),
   agents: z.record(ShadowName, AgentOverride).optional(),
   output_shaping: z
     .object({
